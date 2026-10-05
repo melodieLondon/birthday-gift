@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joyeux anniversaire — ton cadeau</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --boiserie: #3F4A3C;      /* vert sauge des boiseries */
+    --boiserie-deep: #2C3529;
+    --pierre: #E7E5E0;        /* pierre calcaire */
+    --pierre-light: #F3F2EF;
+    --dorure: #B08D57;        /* moulures dorées */
+    --cire: #8E2B2B;          /* cachet de cire */
+    --encre: #2A2622;
+    --serif: "Cormorant Garamond", Garamond, "Times New Roman", serif;
+    --sans: "Work Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    font-weight: 300;
+    color: var(--encre);
+    background: var(--pierre);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+
+  /* ---------- Écran d'ouverture ---------- */
+  /* Papier cadeau + ruban */
+  .envelope {
+    position: fixed; inset: 0; z-index: 10;
+    display: grid; place-items: center;
+    padding: 2rem; text-align: center;
+    color: var(--boiserie-deep);
+    background-color: var(--pierre-light);
+    background-image:
+      radial-gradient(circle, rgba(176,141,87,.35) 1.5px, transparent 1.6px),
+      radial-gradient(circle, rgba(176,141,87,.2) 1px, transparent 1.1px);
+    background-size: 34px 34px, 34px 34px;
+    background-position: 0 0, 17px 17px;
+    overflow: hidden;
+    transition: opacity .8s ease .7s, visibility 0s linear 1.5s;
+  }
+  /* Rubans qui se croisent */
+  .ribbon {
+    position: absolute; background: var(--cire);
+    box-shadow: inset 0 0 0 3px rgba(255,255,255,.12);
+    transition: transform .9s cubic-bezier(.7,0,.3,1);
+  }
+  .ribbon.v { top: 0; bottom: 0; left: 50%; width: 46px; margin-left: -23px; }
+  .ribbon.h { left: 0; right: 0; top: 50%; height: 46px; margin-top: -23px; }
+  .tag {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 1.75rem;
+    background: var(--pierre-light);
+    padding: 2.75rem 2.5rem 2.25rem;
+    border: 1px solid var(--dorure);
+    box-shadow: inset 0 0 0 6px var(--pierre-light), inset 0 0 0 7px rgba(176,141,87,.5),
+                0 18px 40px rgba(44,53,41,.18);
+    max-width: 24rem; width: 100%;
+    transition: transform .6s ease, opacity .5s ease;
+  }
+  .envelope h1 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(2.4rem, 7vw, 3.6rem); line-height: 1.05;
+  }
+  .envelope p { font-size: 1rem; color: var(--encre); opacity: .75; max-width: 24ch; }
+  .seal {
+    width: 104px; height: 104px; border-radius: 50%;
+    border: none; cursor: pointer;
+    background: radial-gradient(circle at 35% 30%, #D9BC85, var(--dorure) 60%, #8A6A3A);
+    box-shadow: inset 0 0 0 6px rgba(255,255,255,.18), 0 6px 16px rgba(0,0,0,.2);
+    color: #3A2A14; font-family: var(--serif); font-size: 1.2rem; font-style: italic;
+    transition: transform .25s ease;
+  }
+  .seal:hover { transform: scale(1.06); }
+  .seal:focus-visible { outline: 2px solid var(--cire); outline-offset: 6px; }
+  /* Ouverture : le ruban se défait, l'étiquette s'efface */
+  body.opened .tag { transform: scale(.9); opacity: 0; }
+  body.opened .ribbon.v { transform: translateY(-105%); }
+  body.opened .ribbon.h { transform: translateX(105%); }
+  body.opened .envelope { opacity: 0; visibility: hidden; }
+  body:not(.opened) { overflow: hidden; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: grid; align-items: end;
+    color: var(--pierre-light);
+    overflow: hidden;
+  }
+  .hero img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    transform: scale(1.08); transition: transform 2.4s ease-out;
+  }
+  body.opened .hero img { transform: scale(1); }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(28,33,26,.85) 0%, rgba(28,33,26,.25) 55%, rgba(28,33,26,.1) 100%);
+  }
+  .hero-text {
+    position: relative; z-index: 1;
+    padding: 0 clamp(1.5rem, 6vw, 6rem) clamp(3rem, 10vh, 6rem);
+    max-width: 60rem;
+  }
+  .hero-text .small { font-size: 1.05rem; opacity: .85; margin-bottom: .75rem; }
+  .hero h2 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(2.8rem, 9vw, 6.5rem); line-height: .95;
+    margin-bottom: 1.25rem;
+  }
+  .hero .lede { font-size: clamp(1.05rem, 2vw, 1.25rem); max-width: 38ch; }
+
+  /* ---------- Sections ---------- */
+  .chapter {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 5rem); align-items: center;
+    max-width: 72rem; margin: 0 auto;
+    padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 3rem);
+  }
+  .chapter.reverse .frame { order: 2; }
+  .chapter h3 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(2rem, 4vw, 2.9rem); line-height: 1.1;
+    color: var(--boiserie-deep);
+    margin-bottom: 1.5rem;
+  }
+  .chapter p {
+    font-family: var(--serif); font-size: 1.3rem; line-height: 1.75;
+    max-width: 34em;
+  }
+  /* Cadre à moulure */
+  .frame {
+    padding: 14px; background: var(--pierre-light);
+    border: 1px solid var(--dorure);
+    box-shadow: inset 0 0 0 5px var(--pierre-light), inset 0 0 0 6px rgba(176,141,87,.6);
+  }
+  .frame img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .frame.landscape img { aspect-ratio: 4 / 3; }
+
+  .band { background: var(--pierre-light); }
+
+  /* ---------- Ce qui est inclus ---------- */
+  .gift {
+    background: var(--boiserie); color: var(--pierre-light);
+    text-align: center;
+    padding: clamp(4rem, 10vw, 7rem) 1.5rem;
+  }
+  .gift h3 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(2.2rem, 5vw, 3.4rem); margin-bottom: 3rem;
+  }
+  .gift ul {
+    list-style: none; display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 1.5rem; max-width: 56rem; margin: 0 auto;
+  }
+  .gift li {
+    flex: 1 1 14rem; padding: 2rem 1.5rem;
+    border: 1px solid rgba(176,141,87,.55);
+  }
+  .gift li strong {
+    display: block; font-family: var(--serif); font-weight: 500;
+    font-size: 1.6rem; color: #E2C998; margin-bottom: .4rem;
+  }
+
+  /* ---------- Fin ---------- */
+  .closing {
+    text-align: center; padding: clamp(4rem, 10vw, 7rem) 1.5rem;
+  }
+  .closing p.big {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(2.2rem, 6vw, 4rem); color: var(--cire); line-height: 1.1;
+  }
+  .closing p.sign { margin-top: 1.25rem; font-size: 1.05rem; }
+
+  /* Image manquante */
+  .missing {
+    display: flex; align-items: center; justify-content: center;
+    background: #D8D5CE; color: #6b665e; font-size: .9rem; text-align: center;
+    padding: 1rem; aspect-ratio: 4 / 5;
+  }
+
+  @media (max-width: 760px) {
+    .chapter { grid-template-columns: 1fr; }
+    .chapter.reverse .frame { order: 0; }
+    .chapter p { font-size: 1.2rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Écran d'ouverture -->
+  <div class="envelope" id="envelope">
+    <span class="ribbon v" aria-hidden="true"></span>
+    <span class="ribbon h" aria-hidden="true"></span>
+    <div class="tag">
+      <h1>Joyeux<br>anniversaire</h1>
+      <p>Un cadeau t'attend. Il ne reste plus qu'à défaire le ruban.</p>
+      <button class="seal" id="openBtn" aria-label="Ouvrir le cadeau">Ouvrir</button>
+    </div>
+  </div>
+
+  <main>
+    <!-- Hero -->
+    <header class="hero">
+      <img src="hotel.png" alt="La maison bourgeoise au pied de la cathédrale de Saint-Omer">
+      <div class="hero-text">
+        <h2>Une nuit à Saint-Omer</h2>
+        <p class="lede">Une nuit dans une ancienne maison de chanoine, petit-déjeuner compris.</p>
+      </div>
+    </header>
+
+    <!-- La maison -->
+    <section class="chapter">
+      <div>
+        <h3>Une demeure chargée d'histoire</h3>
+        <p>Au pied de la cathédrale de Saint-Omer, au cœur du centre historique, séjournez dans cette élégante maison bourgeoise. Classé bâtiment remarquable, ce lieu chargé d’histoire a été sauvé de l’abandon par son propriétaire et restauré avec passion au terme de 5 années de travaux. Ancienne maison de chanoine, elle figure déjà sur les célèbres plans-reliefs de Louis XIV.</p>
+      </div>
+      <figure class="frame">
+        <img src="hotel2.png" alt="Façade et intérieur de la maison">
+      </figure>
+    </section>
+
+    <!-- La chambre -->
+    <div class="band">
+      <section class="chapter reverse">
+        <div>
+          <h3>La chambre</h3>
+          <p>La chambre possède une identité unique, mêlant charme et authenticité. Boiseries anciennes, moulures, cheminées, mobilier d’époque et pierres d’origine témoignent du riche passé de la demeure et du soin apporté à sa préservation à travers les siècles.</p>
+        </div>
+        <figure class="frame">
+          <img src="chambre.png" alt="La chambre avec ses boiseries et sa cheminée">
+        </figure>
+      </section>
+    </div>
+
+    <!-- Le matin -->
+    <section class="chapter">
+      <div>
+        <h3>Le lendemain matin</h3>
+        <p>Le matin, profitez d’un petit-déjeuner servi dans la salle centrale de la maison. Partiez ensuite à la découverte de Saint-Omer : sa cathédrale, ses jardins discrets, son théâtre et ses places animées.</p>
+      </div>
+      <figure class="frame">
+        <img src="ville.png" alt="Le petit-déjeuner dans la salle centrale">
+      </figure>
+    </section>
+
+    <!-- Inclus -->
+    <section class="gift">
+      <h3>Informations</h3>
+      <ul>
+        <li><strong>Location</strong>Clos du Bailli<br> 17Bis Enclos Notre Dame <br> 62500 Saint Omer</li>
+        <li><strong>Date</strong>arrivee du 22/10/2026 à partir de 16H00 <br>
+            depart au 23/10/2026 avant 11H00</li>
+        <li><strong>Remise des clés</strong> SASU CLOS DU BAILLI De Lencquesaing Edouard <br>
+            0683288961 , 0768278695 <br>
+            reception.closdubailli@gmail.com <br>
+            Logan Duhamel, l'hôte de la maison</li>
+      </ul>
+    </section>
+
+    <!-- Fin -->
+    <section class="closing">
+      <p class="big">Joyeux anniversaire !</p>
+      <p class="sign">Avec amour ❤️</p>
+    </section>
+  </main>
+
+<script>
+  document.getElementById('openBtn').addEventListener('click', function () {
+    document.body.classList.add('opened');
+    window.scrollTo(0, 0);
+  });
+
+  // Si une photo est introuvable, afficher un message à la place
+  document.querySelectorAll('.frame img').forEach(function (img) {
+    img.addEventListener('error', function () {
+      var box = document.createElement('div');
+      box.className = 'missing';
+      box.textContent = 'Photo introuvable : ' + img.getAttribute('src');
+      img.replaceWith(box);
+    });
+  });
+</script>
+</body>
+</html>
